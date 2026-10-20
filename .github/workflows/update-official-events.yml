@@ -1,0 +1,49 @@
+name: Update official events
+
+on:
+  schedule:
+    # Daily around 6 AM Eastern
+    - cron: "13 10 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-official-events
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - run: npm install --no-audit --no-fund
+
+      - name: Test event parsing
+        run: npm test
+
+      - name: Install browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Collect events from the official locator
+        run: npm run collect
+
+      - name: Save updated events
+        run: |
+          if [ -n "$(git status --porcelain official-events.json)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add official-events.json
+            git commit -m "Update official events"
+            git pull --rebase origin main
+            git push
+          else
+            echo "No changes to official events."
+          fi

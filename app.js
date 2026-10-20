@@ -26,19 +26,26 @@ const fmtTime = new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-d
 const esc = (s = "") =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+async function getJson(url) {
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error(res.status);
+  return res.json();
+}
+
 async function loadEvents() {
-  try {
-    const res = await fetch("events.json", { cache: "no-store" });
-    if (!res.ok) throw new Error(res.status);
-    const all = await res.json();
-    const now = Date.now() - 6 * 60 * 60 * 1000; // keep events visible for a few hours after start
-    events = all
-      .filter((e) => new Date(e.start).getTime() >= now)
-      .sort((a, b) => new Date(a.start) - new Date(b.start));
-  } catch {
-    events = [];
+  // Our own events, plus store events collected daily from the official locator.
+  const [own, official] = await Promise.allSettled([getJson("events.json"), getJson("official-events.json")]);
+  const all = [
+    ...(own.status === "fulfilled" ? own.value : []),
+    ...(official.status === "fulfilled" ? official.value.events || [] : []),
+  ];
+  if (own.status === "rejected" && official.status === "rejected") {
     emptyEl.textContent = "Events couldn't load. Refresh the page to try again.";
   }
+  const now = Date.now() - 6 * 60 * 60 * 1000; // keep events visible for a few hours after start
+  events = all
+    .filter((e) => new Date(e.start).getTime() >= now)
+    .sort((a, b) => new Date(a.start) - new Date(b.start));
   render();
 }
 
@@ -47,7 +54,7 @@ function actionFor(e) {
     return `<button class="button" type="button" data-signup="${esc(e.id)}">Sign up</button>`;
   }
   if (e.link) {
-    return `<a class="button button-quiet" href="${esc(e.link)}" target="_blank" rel="noopener">Store details</a>`;
+    return `<a class="button button-quiet" href="${esc(e.link)}" target="_blank" rel="noopener">Event details</a>`;
   }
   return "";
 }
@@ -56,7 +63,7 @@ function typeLabel(e) {
   if (e.example) return `<span class="event-type example">Example listing. Replace it in events.json.</span>`;
   return e.type === "hosted"
     ? `<span class="event-type hosted">Sign up on this site</span>`
-    : `<span class="event-type store">Register with the store</span>`;
+    : `<span class="event-type store">${e.source === "official" ? "From the official Play! Pokémon locator" : "Register with the store"}</span>`;
 }
 
 function render() {
@@ -70,7 +77,7 @@ function render() {
   listEl.innerHTML = shown
     .map((e) => {
       const d = new Date(e.start);
-      const meta = [`${fmtFull.format(d)}, ${fmtTime.format(d)}`, e.venue, e.city, e.format, e.fee].filter(Boolean).join(", ");
+      const meta = [`${fmtFull.format(d)}, ${fmtTime.format(d)}`, e.category, e.venue, e.city, e.format, e.fee].filter(Boolean).join(", ");
       return `<li class="event">
         <div class="event-date"><b>${fmtDay.format(d)}</b><span>${fmtMon.format(d)}</span></div>
         <div>
