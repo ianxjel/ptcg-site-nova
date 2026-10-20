@@ -104,6 +104,18 @@ async function collectCity(browser, city) {
 
     await loadAllResults(page, rows);
     return [...rows.values()];
+  } catch (err) {
+    // Report what the page looked like, so a block page is easy to tell apart
+    // from a layout change.
+    let title = "", text = "";
+    try {
+      title = await page.title();
+      text = (await page.locator("body").innerText({ timeout: 5000 })).replace(/\s+/g, " ").slice(0, 300);
+    } catch {
+      /* page gone */
+    }
+    err.message += ` | page title: "${title}" | page text: "${text}"`;
+    throw err;
   } finally {
     await context.close();
   }
@@ -136,6 +148,8 @@ async function main() {
         log(`  ${city}: ${raw.length} rows, ${kept} kept`);
       } catch (err) {
         log(`  ${city}: failed, ${err.message}`);
+        // Shows up as an annotation on the run summary page.
+        log(`::error title=${city} failed::${err.message.replace(/\r?\n/g, " ")}`);
         failures.push(city);
       }
     }
@@ -158,5 +172,6 @@ async function main() {
 
 main().catch((err) => {
   console.error(err.message);
+  console.log(`::error title=Collection failed::${err.message}`);
   process.exit(1);
 });
