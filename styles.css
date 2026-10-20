@@ -1,0 +1,197 @@
+:root {
+  --stock: #eef1f6;      /* card-stock page */
+  --paper: #ffffff;
+  --ink: #1b1e3a;        /* deep sleeve navy */
+  --ink-soft: #545a7a;
+  --line: #d4d9e6;
+  --water: #2e6fd8;      /* hosted events: sign up here */
+  --grass: #2f8f4e;      /* store events: link out */
+  --lightning: #f2c14e;  /* highlight */
+  --fire: #d6452b;       /* errors */
+  --radius-card: 14px;
+  --radius-ctl: 999px;
+  --display: "Bricolage Grotesque", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --stock: #141733;
+    --paper: #1d2146;
+    --ink: #eef0fb;
+    --ink-soft: #a9aed0;
+    --line: #333865;
+    --water: #6ea1ff;
+    --grass: #5cc27c;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--stock);
+  color: var(--ink);
+  font: 400 1.0625rem/1.55 var(--body);
+}
+
+h1, h2, h3 { font-family: var(--display); line-height: 1.05; margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--water); outline-offset: 3px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* Header */
+.site-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: 1.25rem clamp(1rem, 5vw, 4rem);
+}
+.brand {
+  font: 800 1.25rem/1 var(--display); text-decoration: none; letter-spacing: -0.01em;
+}
+.brand span { font-weight: 500; }
+.site-header nav { display: flex; gap: 1.25rem; font-size: 0.95rem; }
+.site-header nav a { text-decoration: none; color: var(--ink-soft); }
+.site-header nav a:hover { color: var(--ink); text-decoration: underline; }
+
+/* Buttons */
+.button {
+  display: inline-block; border: 0; cursor: pointer;
+  background: var(--ink); color: var(--stock);
+  font: 700 1rem/1 var(--body);
+  padding: 0.9rem 1.4rem; border-radius: var(--radius-ctl);
+  text-decoration: none;
+}
+.button:hover { filter: brightness(1.15); }
+.button-quiet { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--line); }
+.button[disabled] { opacity: 0.55; cursor: progress; }
+
+/* Hero */
+.hero {
+  display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5rem); align-items: center;
+  padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 5vw, 4rem) clamp(3rem, 7vw, 6rem);
+}
+.hero h1 {
+  font-size: clamp(2.6rem, 7vw, 5.4rem); font-weight: 800;
+  letter-spacing: -0.035em; max-width: 12ch;
+}
+.hero p { max-width: 46ch; color: var(--ink-soft); font-size: 1.15rem; margin: 1.25rem 0 1.75rem; }
+
+/* The next-up card is shaped like a sleeved trading card */
+.next-up {
+  justify-self: center; width: min(100%, 320px); aspect-ratio: 63 / 88;
+  background: var(--paper); border-radius: 18px; padding: 10px;
+  box-shadow: 0 0 0 6px var(--ink), 0 24px 48px -20px rgba(27, 30, 58, 0.45);
+  transform: rotate(3deg);
+  animation: deal 0.7s cubic-bezier(.2, .8, .2, 1.2) both;
+}
+.next-up-inner {
+  height: 100%; border-radius: 10px; padding: 1.25rem;
+  display: flex; flex-direction: column; gap: 0.75rem;
+  background: linear-gradient(160deg, var(--lightning) 0 38%, var(--paper) 38%);
+  color: var(--ink);
+}
+.next-up-when { font: 800 3.4rem/0.9 var(--display); letter-spacing: -0.04em; color: #1b1e3a; }
+.next-up-when small { display: block; font-size: 1rem; font-weight: 700; letter-spacing: 0; margin-top: 0.35rem; }
+.next-up h3 { font-size: 1.45rem; margin-top: auto; }
+.next-up p { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
+.next-up .button { align-self: flex-start; margin-top: 0.5rem; }
+.next-up-tag { font-size: 0.85rem; font-weight: 700; color: #1b1e3a; }
+
+@keyframes deal {
+  from { opacity: 0; transform: translateY(30px) rotate(-8deg); }
+  to   { opacity: 1; transform: translateY(0) rotate(3deg); }
+}
+
+/* Events */
+.events { padding: 0 clamp(1rem, 5vw, 4rem) 4rem; max-width: 1100px; }
+.events-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1rem 2rem; margin-bottom: 1.5rem; }
+.events h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); letter-spacing: -0.02em; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+.filters input {
+  font: inherit; padding: 0.7rem 1rem; min-width: 220px;
+  border: 2px solid var(--line); border-radius: var(--radius-ctl);
+  background: var(--paper); color: var(--ink);
+}
+.chips { display: flex; gap: 0.4rem; }
+.chip {
+  font: 700 0.9rem/1 var(--body); padding: 0.6rem 0.9rem; cursor: pointer;
+  border-radius: var(--radius-ctl); border: 2px solid var(--line);
+  background: transparent; color: var(--ink-soft);
+}
+.chip.is-on { background: var(--ink); border-color: var(--ink); color: var(--stock); }
+
+.event-list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.event {
+  display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) auto;
+  gap: 1.25rem; align-items: center; padding: 1.25rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.event-date { text-align: center; font-family: var(--display); }
+.event-date b { display: block; font-size: 2.6rem; font-weight: 800; line-height: 0.9; letter-spacing: -0.04em; }
+.event-date span { font-size: 0.9rem; font-weight: 700; color: var(--ink-soft); }
+.event h3 { font-size: 1.3rem; letter-spacing: -0.01em; }
+.event-meta { margin: 0.3rem 0 0; color: var(--ink-soft); font-size: 0.97rem; }
+.event-type { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.88rem; font-weight: 700; margin-top: 0.45rem; }
+.event-type::before { content: ""; width: 0.7rem; height: 0.7rem; border-radius: 50%; background: currentColor; }
+.event-type.hosted { color: var(--water); }
+.event-type.store { color: var(--grass); }
+.event-type.example { color: var(--ink-soft); font-weight: 400; }
+.event-type.example::before { display: none; }
+.event-action .button { white-space: nowrap; }
+
+.empty { color: var(--ink-soft); padding: 2rem 0; }
+
+/* Host */
+.host {
+  margin: 0 clamp(1rem, 5vw, 4rem) 4rem; padding: clamp(1.75rem, 4vw, 3rem);
+  background: var(--paper); border-radius: var(--radius-card); max-width: 1100px;
+  border-left: 8px solid var(--grass);
+}
+.host h2 { font-size: 1.8rem; letter-spacing: -0.02em; }
+.host p { max-width: 60ch; color: var(--ink-soft); margin: 0.75rem 0 1.5rem; }
+
+.site-footer { padding: 2rem clamp(1rem, 5vw, 4rem) 3rem; color: var(--ink-soft); font-size: 0.88rem; }
+.site-footer p { max-width: 70ch; margin: 0; }
+
+/* Sign-up dialog */
+dialog {
+  border: 0; padding: 0; border-radius: var(--radius-card);
+  width: min(92vw, 440px); background: var(--paper); color: var(--ink);
+}
+dialog::backdrop { background: rgba(20, 23, 51, 0.6); }
+.signup-form { padding: 1.75rem; display: grid; gap: 1rem; }
+.signup-form h2 { font-size: 1.7rem; }
+.signup-event { margin: -0.5rem 0 0.25rem; color: var(--ink-soft); }
+.signup-form label { display: grid; gap: 0.35rem; font-weight: 700; font-size: 0.95rem; }
+.signup-form input:not([type="radio"]) {
+  font: 400 1rem var(--body); padding: 0.7rem 0.85rem;
+  border: 2px solid var(--line); border-radius: 10px; background: var(--stock); color: var(--ink);
+}
+.hint { font-weight: 400; color: var(--ink-soft); }
+fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+legend { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.4rem; padding: 0; }
+.signup-form label.radio { display: flex; gap: 0.4rem; align-items: center; font-weight: 400; }
+.form-msg { margin: 0; min-height: 1.4em; font-size: 0.95rem; }
+.form-msg.error { color: var(--fire); }
+.form-msg.ok { color: var(--grass); font-weight: 700; }
+.form-actions { display: flex; justify-content: flex-end; gap: 0.6rem; }
+
+/* Small screens */
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; }
+  .next-up { width: min(100%, 280px); }
+  .site-header nav a[href="#host"] { display: none; }
+  .event { grid-template-columns: 4rem minmax(0, 1fr); }
+  .event-action { grid-column: 2; }
+  .filters input { min-width: 0; flex: 1 1 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .next-up { animation: none; }
+}

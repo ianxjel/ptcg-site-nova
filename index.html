@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NoVA Pokémon TCG</title>
+  <meta name="description" content="Find Pokémon TCG events in Northern Virginia and sign up to play.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./">NoVA <span>Pokémon TCG</span></a>
+    <nav>
+      <a href="#events">Events</a>
+      <a href="#host">List your event</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <h1>Play Pokémon TCG in Northern Virginia.</h1>
+        <p>League nights, locals and community tournaments from Arlington to Leesburg. Find one near you and save your seat.</p>
+        <a class="button" href="#events">See upcoming events</a>
+      </div>
+      <aside class="next-up" id="next-up" aria-live="polite">
+        <!-- filled by app.js -->
+      </aside>
+    </section>
+
+    <section class="events" id="events">
+      <div class="events-head">
+        <h2>Upcoming events</h2>
+        <form class="filters" id="filters" role="search">
+          <label class="sr-only" for="q">Search events</label>
+          <input id="q" type="search" placeholder="Search by store or city">
+          <div class="chips" role="group" aria-label="Event type">
+            <button type="button" class="chip is-on" data-type="all" aria-pressed="true">All</button>
+            <button type="button" class="chip" data-type="hosted" aria-pressed="false">Sign up here</button>
+            <button type="button" class="chip" data-type="store" aria-pressed="false">At stores</button>
+          </div>
+        </form>
+      </div>
+      <ol class="event-list" id="event-list"></ol>
+      <p class="empty" id="empty" hidden>No events match that search. Try a different city or clear the filter.</p>
+    </section>
+
+    <section class="host" id="host">
+      <h2>Run events in NoVA?</h2>
+      <p>Store owners and organizers can get their league nights and tournaments listed here for free. Send the date, time, address and format, and a sign-up link if you have one.</p>
+      <a class="button button-quiet" href="mailto:hello@example.com?subject=List%20my%20event">Email us your event</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>A community site for Northern Virginia players. Not affiliated with Nintendo, The Pokémon Company or Play! Pokémon.</p>
+  </footer>
+
+  <dialog id="signup" aria-labelledby="signup-title">
+    <form method="dialog" class="signup-form" id="signup-form" novalidate>
+      <h2 id="signup-title">Sign up</h2>
+      <p class="signup-event" id="signup-event"></p>
+      <label>Name
+        <input name="name" required autocomplete="name">
+      </label>
+      <label>Email
+        <input name="email" type="email" required autocomplete="email">
+      </label>
+      <label>Player ID <span class="hint">optional</span>
+        <input name="player_id" inputmode="numeric" autocomplete="off">
+      </label>
+      <fieldset>
+        <legend>Division</legend>
+        <label class="radio"><input type="radio" name="division" value="Junior"> Junior</label>
+        <label class="radio"><input type="radio" name="division" value="Senior"> Senior</label>
+        <label class="radio"><input type="radio" name="division" value="Masters" checked> Masters</label>
+      </fieldset>
+      <p class="form-msg" id="form-msg" role="status"></p>
+      <div class="form-actions">
+        <button type="button" class="button button-quiet" id="signup-cancel">Cancel</button>
+        <button type="submit" class="button" id="signup-submit" value="submit">Save my seat</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

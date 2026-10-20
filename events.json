@@ -1,0 +1,28 @@
+[
+  {
+    "id": "example-league-night",
+    "example": true,
+    "type": "hosted",
+    "title": "Example: Standard league night",
+    "start": "2026-11-12T18:30:00-05:00",
+    "venue": "Your store name",
+    "city": "Fairfax, VA",
+    "address": "123 Main St, Fairfax, VA",
+    "format": "Standard, best of 1",
+    "fee": "$10",
+    "capacity": 32
+  },
+  {
+    "id": "example-store-challenge",
+    "example": true,
+    "type": "store",
+    "title": "Example: Store tournament",
+    "start": "2026-11-21T12:00:00-05:00",
+    "venue": "Another local store",
+    "city": "Arlington, VA",
+    "address": "456 Oak Ave, Arlington, VA",
+    "format": "Standard, best of 3",
+    "fee": "$15",
+    "link": "https://www.pokemon.com/us/play-pokemon/pokemon-events"
+  }
+]
